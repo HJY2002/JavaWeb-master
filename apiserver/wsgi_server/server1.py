@@ -3,8 +3,11 @@ from wsgiref.simple_server import make_server
 
 def app(env, make_response):
     # 处理业务的最核心的函数
-    for k, v in env.items():
-        print(k,':',v)
+    # for k, v in env.items():
+    #     print(k,':',v)
+    path = env['PATH_INFO']
+    #
+
     #生成响应的头
     make_response('200 ok', [('Content-Type','text/html;charset=utf-8')])
     return ['<h1>Hello World</h1>'.encode('utf-8')]#响应数据
