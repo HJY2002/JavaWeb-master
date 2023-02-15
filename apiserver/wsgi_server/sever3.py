@@ -15,10 +15,38 @@ def bank():
         'error': '加载错误'
     }
     # 渲染模板
-    html = render_template('bank.html', **data)
+    """html = render_template('bank.html', **data)
     print(html+'\n')
     raise Exception('测试异常')
-    return html
+    return html"""
+
+    if request.method == 'GET':
+        return render_template('bank.html', **data)
+    else:
+        #处理POST请求
+        #获取表单参数
+        name=request.form.get('name',None)
+        card_num=request.form.get('card_num',None)
+        if all((name,card_num)):
+            app.logger.info('name:%s->card:%s'%(name,card_num))#日志输出
+            return """<h2>信息正确</h2>
+                    <h4 id="result"></h4>
+                    <script>
+                        let steps=5;
+                        let interval_id=0;
+                        setInterval(()=>{
+                            if(steps>=0){
+                                document.getElementById("result").innerHTML=steps--;
+                            }else{
+                            //取消定时器
+                            clearInterval(interval_id);
+                            window.open('/hi',target='_self');
+                            
+                        },1000)
+                    </script>"""
+        else:
+            data['error'] = '参数错误'
+            return render_template('bank.html', **data)
 
 
 # 启动flask的服务器
